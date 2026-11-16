@@ -1,636 +1,870 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alianza de la Juventud Oaxaqueña A.C.</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Impulsamos el liderazgo juvenil, el voluntariado y la acción social para generar impacto real en las comunidades de Oaxaca.">
   <link rel="icon" href="assets/logo_alianza.png" type="image/png">
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Colores y fuentes de la marca (tomados del logo)
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            noche: '#14254F',   // azul profundo: fondos oscuros y texto principal
+            azul: '#3F7FC1',    // azul del mapa de Oaxaca en el logo
+            morado: '#7E22CE',  // botones principales
+            moradoOsc: '#6B21A8',
+            papel: '#F6F7FB',   // fondo claro de secciones
+            sol: '#F2C230'      // acento amarillo del logo
+          },
+          fontFamily: {
+            display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+            sans: ['Figtree', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+    h1, h2, h3 { font-family: "Bricolage Grotesque", system-ui, sans-serif; letter-spacing: -0.01em; }
+
+    /* Franja de 8 colores: las 8 figuras del logo */
+    .franja {
+      background: linear-gradient(90deg,
+        #F2D21B 0 12.5%, #C5D02B 12.5% 25%, #3BB273 25% 37.5%, #45C1E8 37.5% 50%,
+        #6E4FA3 50% 62.5%, #C548A4 62.5% 75%, #E0383E 75% 87.5%, #F07F2A 87.5% 100%);
+    }
+    .franja-v {
+      background: linear-gradient(180deg,
+        #F2D21B 0 12.5%, #C5D02B 12.5% 25%, #3BB273 25% 37.5%, #45C1E8 37.5% 50%,
+        #6E4FA3 50% 62.5%, #C548A4 62.5% 75%, #E0383E 75% 87.5%, #F07F2A 87.5% 100%);
+    }
+
+    /* Foco visible en toda la página */
+    :focus-visible { outline: 3px solid #7E22CE; outline-offset: 3px; }
+    .sobre-oscuro :focus-visible { outline-color: #F2C230; }
+
+    /* ENCABEZADO: azul noche arriba, blanco al bajar */
+    .site-header { background: #14254F; color: #fff; transition: background-color .35s, color .35s, box-shadow .35s; }
+    .site-header .header-row { transition: padding .35s; }
+    .site-header.is-solid { background: #fff; color: #14254F; box-shadow: 0 6px 24px -12px rgba(20, 37, 79, .35); }
+    .site-header.is-solid .header-row { padding-top: .5rem; padding-bottom: .5rem; }
+    .site-header.is-solid :focus-visible { outline-color: #7E22CE; }
+    .site-header.menu-open { background: #14254F; color: #fff; box-shadow: none; }
+    .nav-link { position: relative; padding: .25rem 0; }
+    .nav-link::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+      background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s;
+    }
+    .nav-link:hover::after, .nav-link[aria-current="true"]::after { transform: scaleX(1); }
+    .site-header:not(.is-solid) .nav-link[aria-current="true"] { color: #F2C230; }
+
+    /* PORTADA: una sola secuencia de entrada */
+    @keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @keyframes crecer { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    .hero-in { opacity: 0; animation: subir .7s cubic-bezier(.2, .7, .2, 1) forwards; }
+    .hero-in.d1 { animation-delay: .1s; } .hero-in.d2 { animation-delay: .25s; } .hero-in.d3 { animation-delay: .4s; }
+    .hero-franja { transform-origin: top; animation: crecer .9s cubic-bezier(.2, .7, .2, 1) .15s both; }
+
+    /* PREGUNTAS FRECUENTES */
+    .faq summary { list-style: none; cursor: pointer; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq .chev { transition: transform .25s; }
+    .faq details[open] .chev { transform: rotate(180deg); }
+    .faq details[open] .faq-body { animation: subir .3s ease; }
+
+    /* INSTAGRAM */
+    .ig-card img { transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+    .ig-card:hover img, .ig-card:focus-visible img { transform: scale(1.06); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-in, .hero-franja { animation: none; opacity: 1; transform: none; }
+      .faq details[open] .faq-body { animation: none; }
+      .ig-card img, .faq .chev, .nav-link::after { transition: none; }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 overflow-x-hidden">
-<header id="header" class="fixed top-0 w-full z-50 transition-all duration-500">
+<body class="bg-white text-noche font-sans antialiased overflow-x-hidden">
 
-  <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+<!-- ENCABEZADO -->
+<header id="header" class="site-header fixed top-0 inset-x-0 z-50">
+  <div class="header-row max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-6 relative z-10">
 
-    <!-- IZQUIERDA -->
-    <div class="flex items-center gap-4 md:gap-5 z-50 mr-8">
-
-      <!-- LOGO -->
-      <img src="assets/logo_alianza.png" 
-           class="h-10 md:h-14 transition-all duration-300">
-
-      <!-- TEXTO -->
-      <span id="logoText" 
-      class="font-bold text-sm md:text-[1.35rem] leading-tight text-white transition-all duration-500">
-
-        <!-- MOVIL -->
-        <span class="block md:hidden">
-          Alianza de la Juventud
-        </span>
-
-        <span class="block md:hidden">
-          Oaxaqueña A.C.
-        </span>
-
-        <!-- DESKTOP -->
-        <span class="hidden md:inline whitespace-nowrap">
-          Alianza de la Juventud Oaxaqueña A.C.
-        </span>
-
+    <a href="#inicio" class="flex items-center gap-3 shrink-0">
+      <img src="assets/logo_alianza.png" alt="" class="h-10 md:h-12 w-auto bg-white rounded-full p-0.5">
+      <span class="font-display font-extrabold text-sm md:text-lg leading-tight">
+        Alianza de la Juventud<br class="md:hidden"> Oaxaqueña A.C.
       </span>
+    </a>
 
-    </div>
-
-    <!-- MENU DESKTOP -->
-    <nav id="desktopMenu"
-      class="hidden md:flex items-center gap-8 bg-white/10 backdrop-blur-xl px-8 py-3 rounded-2xl border border-white/20 shadow-xl transition-all duration-300">
-
-      <a href="#impacto" class="nav-link text-white font-medium hover:text-blue-300 transition">
-        Impacto
-      </a>
-
-      <a href="#participa" class="nav-link text-white font-medium hover:text-blue-300 transition">
-        Participa
-      </a>
-
-      <a href="#eventos" class="nav-link text-white font-medium hover:text-blue-300 transition">
-        Programas
-      </a>
-
-      <a href="#alianzas" class="nav-link text-white font-medium hover:text-blue-300 transition">
-        Alianzas
-      </a>
-
-      <a href="#contacto" class="nav-link text-white font-medium hover:text-blue-300 transition">
-        Contacto
-      </a>
-
+    <nav aria-label="Principal" class="hidden lg:flex items-center gap-7 font-medium">
+      <a href="#impacto" class="nav-link">Impacto</a>
+      <a href="#nosotros" class="nav-link">Nosotros</a>
+      <a href="#participa" class="nav-link">Participa</a>
+      <a href="#programas" class="nav-link">Programas</a>
+      <a href="#alianzas" class="nav-link">Alianzas</a>
+      <a href="#contacto" class="nav-link">Contacto</a>
     </nav>
 
-    <!-- DERECHA -->
-    <div class="flex items-center gap-3 z-50 ml-auto">
-
-      <!-- BOTON UNETE DESKTOP -->
+    <div class="flex items-center gap-2">
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
-        target="_blank"
-        class="hidden md:block bg-purple-700 text-white px-5 py-2 rounded-xl shadow hover:bg-purple-800 hover:scale-105 transition">
+         target="_blank" rel="noopener noreferrer"
+         class="bg-morado hover:bg-moradoOsc text-white font-semibold px-4 md:px-5 py-2 rounded-xl text-sm md:text-base transition-colors">
         Únete
       </a>
-
-      <!-- BOTON UNETE MOVIL -->
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
-        target="_blank"
-        class="md:hidden bg-purple-700 text-white px-4 py-2 rounded-xl shadow hover:bg-purple-800 transition text-sm">
-        Únete
-      </a>
-
-      <!-- BOTON MENU -->
-      <button id="menuBtn"
-        class="md:hidden focus:outline-none transition duration-300 ml-2">
-
-        <svg id="menuIcon"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-9 w-9 text-white transition duration-300"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor">
-
-          <path stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16" />
-
+      <button id="menuBtn" type="button" class="lg:hidden p-2 -mr-2"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+        <svg id="iconOpen" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/>
         </svg>
-
+        <svg id="iconClose" class="h-8 w-8 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
+        </svg>
       </button>
-
     </div>
-
   </div>
 
-  <!-- MENU MOVIL -->
-  <div id="mobileMenu"
-    class="hidden md:hidden absolute top-0 left-0 w-full min-h-screen bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center gap-8 text-center transition-all duration-500">
+  <div class="franja h-1" aria-hidden="true"></div>
 
-    <a href="#impacto" class="mobile-link text-white text-2xl font-semibold hover:text-blue-400 transition">
-      Impacto
-    </a>
-
-    <a href="#participa" class="mobile-link text-white text-2xl font-semibold hover:text-blue-400 transition">
-      Participa
-    </a>
-
-    <a href="#eventos" class="mobile-link text-white text-2xl font-semibold hover:text-blue-400 transition">
-      Programas
-    </a>
-
-    <a href="#alianzas" class="mobile-link text-white text-2xl font-semibold hover:text-blue-400 transition">
-      Alianzas
-    </a>
-
-    <a href="#contacto" class="mobile-link text-white text-2xl font-semibold hover:text-blue-400 transition">
-      Contacto
-    </a>
-
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
-      target="_blank"
-      class="bg-purple-700 text-white px-8 py-3 rounded-xl mt-4 hover:bg-purple-800 transition">
-      Únete
-    </a>
-
-  </div>
-
+  <!-- MENÚ MÓVIL -->
+  <nav id="mobileMenu" aria-label="Menú móvil"
+       class="sobre-oscuro hidden lg:hidden fixed inset-0 bg-noche text-white flex-col items-center justify-center gap-7 text-2xl font-display font-semibold">
+    <a href="#impacto" class="mobile-link">Impacto</a>
+    <a href="#nosotros" class="mobile-link">Nosotros</a>
+    <a href="#participa" class="mobile-link">Participa</a>
+    <a href="#programas" class="mobile-link">Programas</a>
+    <a href="#alianzas" class="mobile-link">Alianzas</a>
+    <a href="#contacto" class="mobile-link">Contacto</a>
+  </nav>
 </header>
-<style>
-html { scroll-behavior: smooth; }
-</style>
 
-<!-- PRIMER SECCIÓN -->
-<section id="hero"
-  class="h-screen flex items-center justify-center text-white text-center px-6 relative"
-  style="background:url('assets/logo_alianza.png') center/contain no-repeat; background-color:#fafbff;">
-  <div class="absolute inset-0 bg-black/60"></div>
-  <div class="relative z-10 max-w-3xl">
-    <h1 class="text-5xl md:text-6xl font-bold mb-6">Impulsando juventudes para transformar Oaxaca</h1>
-    <p class="text-sm sm:text-base md:text-lg mb-8 max-w-xl mx-auto">Impulsamos el liderazgo juvenil, el voluntariado y la acción social para generar impacto real en nuestras comunidades.</p>
-    <div class="flex flex-wrap justify-center gap-4">
-      
-      <!-- BOTÓN 1 -->
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform" target="_blank"
-         class="bg-white text-blue-700 px-6 py-3 rounded-xl transition duration-300 transform hover:scale-110 hover:bg-blue-600 hover:text-white shadow-lg hover:shadow-xl">
-        Quiero ser parte
-      </a>
+<main>
+
+<!-- PORTADA -->
+<section id="inicio" class="sobre-oscuro bg-noche text-white pt-[4.75rem] md:pt-[5.25rem]">
+  <div class="grid lg:grid-cols-[1.15fr_auto_1fr] lg:min-h-[calc(100svh-5.25rem)]">
+
+    <div class="order-2 lg:order-1 flex items-center px-6 md:px-12 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:pr-14 py-14 lg:py-20">
+      <div class="max-w-xl">
+        <h1 class="hero-in font-display font-extrabold text-[2.5rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem]">
+          Impulsando juventudes para transformar Oaxaca
+        </h1>
+        <p class="hero-in d1 mt-6 text-lg text-white/80 max-w-md">
+          Impulsamos el liderazgo juvenil, el voluntariado y la acción social para generar impacto real en nuestras comunidades.
+        </p>
+        <div class="hero-in d2 mt-9 flex flex-wrap gap-3">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
+             target="_blank" rel="noopener noreferrer"
+             class="bg-white text-noche hover:bg-sol font-semibold px-6 py-3 rounded-xl transition-colors">
+            Quiero ser parte
+          </a>
+          <a href="#programas"
+             class="border-2 border-white/40 hover:border-white font-semibold px-6 py-3 rounded-xl transition-colors">
+            Conoce los programas
+          </a>
+        </div>
+        <p class="hero-in d3 mt-12 text-sm text-white/60">Solidaridad, compromiso, pluralidad.</p>
+      </div>
+    </div>
+
+    <div class="hero-franja franja-v hidden lg:block w-2 order-2" aria-hidden="true"></div>
+    <div class="hero-franja franja lg:hidden h-1.5 order-1 [animation:none]" aria-hidden="true"></div>
+
+    <div class="order-1 lg:order-3 relative h-[46vh] sm:h-[52vh] lg:h-auto">
+      <img src="assets/hospital.jpeg"
+           alt="Voluntarios de la Alianza durante una actividad comunitaria en Oaxaca"
+           class="absolute inset-0 w-full h-full object-cover object-[50%_70%]"
+           width="1440" height="1252" fetchpriority="high">
     </div>
   </div>
-</section>
 </section>
 
 <!-- IMPACTO -->
-<section id="impacto" class="py-20 text-center">
-  <h1 class="text-4xl font-bold text-center mt-20 mb-10">Nuestro Impacto</h1>
+<section id="impacto" class="py-20 md:py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-extrabold text-3xl md:text-4xl">Nuestro impacto</h2>
+    <p class="mt-3 text-noche/70 max-w-xl">Una red de jóvenes que ya está cambiando sus comunidades.</p>
 
-  <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-
-    <!-- ITEM 1 -->
-    <div class="flex flex-col items-center justify-center">
-      <p class="text-sm text-gray-500 mb-1">Una red de</p>
-      <h3 id="count1" class="text-4xl font-bold text-blue-600">0</h3>
-      <p>Jóvenes formados y activos</p>
-    </div>
-
-    <!-- ITEM 2 -->
-    <div class="flex flex-col items-center justify-center">
-      <p class="text-sm text-gray-500 mb-1 opacity-0">placeholder</p>
-      <h3 id="count2" class="text-4xl font-bold text-blue-600">0</h3>
-      <p>Proyectos sociales implementados</p>
-    </div>
-
-    <!-- ITEM 3 -->
-    <div class="flex flex-col items-center justify-center">
-      <p class="text-sm text-gray-500 mb-1 opacity-0">placeholder</p>
-      <h3 id="count3" class="text-4xl font-bold text-blue-600">0</h3>
-      <p>Comunidades impactadas</p>
-    </div>
-
+    <dl class="mt-12 grid sm:grid-cols-3 gap-y-10 sm:divide-x divide-noche/10">
+      <div class="sm:pr-8 flex flex-col-reverse gap-1">
+        <dt class="text-noche/70">Jóvenes formados y activos</dt>
+        <dd class="font-display font-extrabold text-6xl md:text-7xl text-morado tabular-nums"><span id="count1" data-target="100">100</span>+</dd>
+      </div>
+      <div class="sm:px-8 flex flex-col-reverse gap-1">
+        <dt class="text-noche/70">Proyectos sociales implementados</dt>
+        <dd class="font-display font-extrabold text-6xl md:text-7xl text-azul tabular-nums"><span id="count2" data-target="20">20</span>+</dd>
+      </div>
+      <div class="sm:pl-8 flex flex-col-reverse gap-1">
+        <dt class="text-noche/70">Comunidades impactadas</dt>
+        <dd class="font-display font-extrabold text-6xl md:text-7xl text-[#E0383E] tabular-nums"><span id="count3" data-target="14">14</span>+</dd>
+      </div>
+    </dl>
   </div>
 </section>
 
 <!-- SOBRE NOSOTROS -->
-<section class="py-20 px-6 max-w-6xl mx-auto">
-  <h2 class="text-4xl font-bold text-center mb-10">Sobre Nosotros</h2>
-  <div class="grid md:grid-cols-3 gap-8">
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="font-bold mb-3">Misión</h3>
-      <p class="text-sm">Impulsamos el desarrollo integral de las juventudes y comunidades en Oaxaca a través del voluntariado, la formación y la acción social, promoviendo los derechos humanos, la inclusión y la participación activa para generar impacto real.</p>
+<section id="nosotros" class="bg-papel py-20 md:py-24 px-6">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start">
+    <div class="lg:sticky lg:top-28">
+      <h2 class="font-display font-extrabold text-3xl md:text-4xl">Sobre nosotros</h2>
+      <p class="mt-4 text-noche/70 max-w-sm">
+        Somos jóvenes de Oaxaca que se organizan para servir a su comunidad. Como las ocho figuras de nuestro logo: distintos, tomados de la mano.
+      </p>
+      <img src="assets/logo_alianza.png" alt="" class="mt-10 w-40 md:w-48" loading="lazy">
     </div>
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="font-bold mb-3">Visión</h3>
-      <p class="text-sm">Ser una organización referente en Oaxaca por su impacto social, formando juventudes líderes comprometidas con la construcción de comunidades más justas, inclusivas y sostenibles.</p>
+
+    <div class="space-y-5">
+      <article class="bg-white rounded-2xl p-7 border-t-4 border-[#3BB273]">
+        <div class="flex items-center gap-3">
+          <svg class="h-7 w-7 text-[#3BB273]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+          <h3 class="font-bold text-xl">Misión</h3>
+        </div>
+        <p class="mt-3 text-noche/80 leading-relaxed">Impulsamos el desarrollo integral de las juventudes y comunidades en Oaxaca a través del voluntariado, la formación y la acción social, promoviendo los derechos humanos, la inclusión y la participación activa para generar impacto real.</p>
+      </article>
+      <article class="bg-white rounded-2xl p-7 border-t-4 border-[#45C1E8]">
+        <div class="flex items-center gap-3">
+          <svg class="h-7 w-7 text-[#2AA5CC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <h3 class="font-bold text-xl">Visión</h3>
+        </div>
+        <p class="mt-3 text-noche/80 leading-relaxed">Ser una organización referente en Oaxaca por su impacto social, formando juventudes líderes comprometidas con la construcción de comunidades más justas, inclusivas y sostenibles.</p>
+      </article>
+      <article class="bg-white rounded-2xl p-7 border-t-4 border-[#C548A4]">
+        <div class="flex items-center gap-3">
+          <svg class="h-7 w-7 text-[#C548A4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21V4m0 0h11l-2 4 2 4H5"/></svg>
+          <h3 class="font-bold text-xl">Objetivo</h3>
+        </div>
+        <p class="mt-3 text-noche/80 leading-relaxed">Fortalecer procesos sociales, educativos y comunitarios mediante acciones de voluntariado, formación y acompañamiento, beneficiando a poblaciones en situación de vulnerabilidad.</p>
+      </article>
     </div>
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="font-bold mb-3">Objetivo</h3>
-      <p class="text-sm">Fortalecer procesos sociales, educativos y comunitarios mediante acciones de voluntariado, formación y acompañamiento, beneficiando a poblaciones en situación de vulnerabilidad.</p>
-    </div>
+  </div>
 </section>
 
 <!-- FORMAS DE PARTICIPAR -->
-<section id="participa" class="py-20 px-6 max-w-6xl mx-auto">
-  <h2 class="text-4xl font-bold text-center mb-10">Se parte de una generación que transforma</h2>
-  <div class="grid md:grid-cols-3 gap-6">
-    <div class="bg-white p-6 rounded-2xl shadow text-center hover:shadow-xl transition">
-      <h3 class="font-bold text-lg mb-3">Voluntariado</h3>
-      <p class="text-sm mb-4">Participa en acciones reales y genera impacto directo en tu comunidad.
-       Desarrolla liderazgo, habilidades sociales y compromiso.</p>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform" target="_blank" class="bg-blue-600 text-white px-5 py-2 rounded-lg">Registrarme</a>
-    </div>
-    <div class="bg-white p-6 rounded-2xl shadow text-center hover:shadow-xl transition">
-      <h3 class="font-bold text-lg mb-3">Servicio Social</h3>
-      <p class="text-sm mb-4">Libera tu servicio social participando en proyectos con impacto real y acompañamiento institucional.</p>
-      <a href="https://wa.me/529512879880?text=Hola,%20me%20gustar%C3%ADa%20hacer%20mi%20servicio%20social%20con%20ustedes,%20pueden%20darme%20mas%20informacion?" target="_blank" class="bg-green-500 text-white px-5 py-2 rounded-lg">Solicitar info</a>
-    </div>
-    <div class="bg-white p-6 rounded-2xl shadow text-center hover:shadow-xl transition">
-      <h3 class="font-bold text-lg mb-3">Prácticas Profesionales</h3>
-      <p class="text-sm mb-4">Adquiere experiencia profesional en proyectos sociales reales y fortalece tu perfil laboral.</p>
-      <a href="https://wa.me/529512879880?text=Hola,%20me%20gustar%C3%ADa%20hacer%20mis%20practicas%20profesionales%20con%20ustedes,%20pueden%20darme%20mas%20informacion?" target="_blank" class="bg-green-500 text-white px-5 py-2 rounded-lg">Solicitar info</a>
+<section id="participa" class="py-20 md:py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-extrabold text-3xl md:text-4xl max-w-2xl">Sé parte de una generación que transforma</h2>
+    <p class="mt-3 text-noche/70 max-w-xl">Elige cómo quieres participar. Todas nuestras actividades son gratuitas.</p>
+
+    <div class="mt-12 grid md:grid-cols-3 gap-6">
+      <article class="flex flex-col rounded-2xl border border-noche/10 p-7">
+        <svg class="h-10 w-10 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+        <h3 class="mt-5 font-bold text-xl">Voluntariado</h3>
+        <p class="mt-2 text-noche/75 leading-relaxed">Participa en acciones reales y genera impacto directo en tu comunidad. Desarrolla liderazgo, habilidades sociales y compromiso.</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
+           target="_blank" rel="noopener noreferrer"
+           class="mt-auto pt-7 self-start">
+          <span class="inline-block bg-morado hover:bg-moradoOsc text-white font-semibold px-5 py-2.5 rounded-xl transition-colors">Registrarme</span>
+        </a>
+      </article>
+
+      <article class="flex flex-col rounded-2xl border border-noche/10 p-7">
+        <svg class="h-10 w-10 text-azul" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9l9-5 9 5-9 5-9-5zm3 2v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
+        <h3 class="mt-5 font-bold text-xl">Servicio social</h3>
+        <p class="mt-2 text-noche/75 leading-relaxed">Libera tu servicio social participando en proyectos con impacto real y acompañamiento institucional.</p>
+        <a href="https://wa.me/529512879880?text=Hola,%20me%20gustar%C3%ADa%20hacer%20mi%20servicio%20social%20con%20ustedes,%20%C2%BFpueden%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+           target="_blank" rel="noopener noreferrer"
+           class="mt-auto pt-7 self-start">
+          <span class="inline-flex items-center gap-2 border-2 border-morado text-morado hover:bg-morado hover:text-white font-semibold px-5 py-2 rounded-xl transition-colors">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3z"/></svg>
+            Pedir información
+          </span>
+        </a>
+      </article>
+
+      <article class="flex flex-col rounded-2xl border border-noche/10 p-7">
+        <svg class="h-10 w-10 text-[#F07F2A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+        <h3 class="mt-5 font-bold text-xl">Prácticas profesionales</h3>
+        <p class="mt-2 text-noche/75 leading-relaxed">Adquiere experiencia profesional en proyectos sociales reales y fortalece tu perfil laboral.</p>
+        <a href="https://wa.me/529512879880?text=Hola,%20me%20gustar%C3%ADa%20hacer%20mis%20pr%C3%A1cticas%20profesionales%20con%20ustedes,%20%C2%BFpueden%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+           target="_blank" rel="noopener noreferrer"
+           class="mt-auto pt-7 self-start">
+          <span class="inline-flex items-center gap-2 border-2 border-morado text-morado hover:bg-morado hover:text-white font-semibold px-5 py-2 rounded-xl transition-colors">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3z"/></svg>
+            Pedir información
+          </span>
+        </a>
+      </article>
     </div>
   </div>
 </section>
 
 <!-- PROGRAMAS -->
-<section id="eventos">
-<section class="py-20 px-6 max-w-6xl mx-auto">
-  <h2 class="text-4xl font-bold text-center mb-12">Sé parte de nuestros programas</h2>
-  <div class="grid md:grid-cols-3 gap-6">
-    <a href="assets/Escuela de liderazgo.jpeg" target="_blank">
-      <img src="assets/Escuela de liderazgo.jpeg" class="w-full h-64 object-cover rounded-2xl shadow hover:scale-105 transition">
-    </a>
-    <a href="assets/Voluntario Digital.jpeg" target="_blank">
-      <img src="assets/Voluntario Digital.jpeg" class="w-full h-64 object-cover rounded-2xl shadow hover:scale-105 transition">
-    </a>
-    <a href="assets/Voluntario Hospital.jpeg" target="_blank">
-      <img src="assets/Voluntario Hospital.jpeg" class="w-full h-64 object-cover rounded-2xl shadow hover:scale-105 transition">
-    </a>
+<section id="programas" class="bg-papel py-20 md:py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-extrabold text-3xl md:text-4xl">Nuestros programas</h2>
+    <p class="mt-3 text-noche/70 max-w-xl">Toca un programa para ver el cartel completo.</p>
+
+    <div class="mt-12 grid md:grid-cols-3 gap-6">
+      <a href="assets/Escuela de liderazgo.jpeg" target="_blank" rel="noopener noreferrer"
+         class="group bg-white rounded-2xl overflow-hidden flex flex-col">
+        <div class="aspect-square overflow-hidden">
+          <img src="assets/Escuela de liderazgo.jpeg" alt="Cartel de la Escuela de Liderazgo para Mujeres"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="1080" height="1080">
+        </div>
+        <div class="p-6">
+          <h3 class="font-bold text-xl">Escuela de Liderazgo para Mujeres</h3>
+          <p class="mt-2 text-noche/75">Formación en liderazgo para mujeres jóvenes de Oaxaca.</p>
+          <span class="mt-4 inline-block font-semibold text-morado group-hover:underline">Ver cartel</span>
+        </div>
+      </a>
+
+      <a href="assets/Voluntario Digital.jpeg" target="_blank" rel="noopener noreferrer"
+         class="group bg-white rounded-2xl overflow-hidden flex flex-col">
+        <div class="aspect-square overflow-hidden">
+          <img src="assets/Voluntario Digital.jpeg" alt="Cartel del programa Voluntariado Digital"
+               class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy" width="1080" height="1350">
+        </div>
+        <div class="p-6">
+          <h3 class="font-bold text-xl">Voluntariado Digital</h3>
+          <p class="mt-2 text-noche/75">Mercadotecnia, comunicación y diseño gráfico. Ofrece experiencia real, certificado y capacitación.</p>
+          <span class="mt-4 inline-block font-semibold text-morado group-hover:underline">Ver cartel</span>
+        </div>
+      </a>
+
+      <a href="assets/Voluntario Hospital.jpeg" target="_blank" rel="noopener noreferrer"
+         class="group bg-white rounded-2xl overflow-hidden flex flex-col">
+        <div class="aspect-square overflow-hidden">
+          <img src="assets/Voluntario Hospital.jpeg" alt="Voluntarios del programa Manos al Servicio frente a una fuente en Oaxaca"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="1080" height="1080">
+        </div>
+        <div class="p-6">
+          <h3 class="font-bold text-xl">Manos al Servicio</h3>
+          <p class="mt-2 text-noche/75">Atención humanitaria en contextos hospitalarios.</p>
+          <span class="mt-4 inline-block font-semibold text-morado group-hover:underline">Ver cartel</span>
+        </div>
+      </a>
+    </div>
   </div>
 </section>
-</section>
 
-<!--Alianzas -->
- <section id="alianzas">
-<section class="bg-gray-100 py-20 px-6">
-  <div class="max-w-6xl mx-auto text-center">
-    <h2 class="text-4xl font-bold mb-10">Hemos colaborado con...</h2>
-    <p class="mb-10 text-gray-600">Trabajamos en colaboración con instituciones, organizaciones y colectivos que comparten nuestra visión de transformar Oaxaca.</p>
+<!-- ALIANZAS -->
+<section id="alianzas" class="py-20 md:py-24 px-6">
+<style>
+  /* TARJETAS DE ALIADOS QUE GIRAN */
+  #alianzas .flip-card {
+    display: block;
+    height: 10rem;
+    perspective: 1000px;
+    border-radius: 1rem;
+    color: inherit;
+  }
+  #alianzas .flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+  }
+  #alianzas .flip-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 1rem;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  #alianzas .flip-back {
+    transform: rotateY(180deg);
+  }
+  /* Computadora: gira al pasar el cursor */
+  @media (hover: hover) {
+    #alianzas .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+  }
+  /* Teclado y celular (clase agregada por JS) */
+  #alianzas .flip-card:focus-visible .flip-inner,
+  #alianzas .flip-card.is-flipped .flip-inner {
+    transform: rotateY(180deg);
+  }
+  #alianzas .flip-card:focus-visible {
+    outline: 3px solid #7e22ce;
+    outline-offset: 4px;
+  }
+  /* Tarjetas sin enlace todavía (href="#") */
+  #alianzas .flip-card[href="#"] { cursor: default; }
+  #alianzas .flip-card[href="#"] .flip-link { display: none; }
+  /* Movimiento reducido: sin animación, solo cambio de cara */
+  @media (prefers-reduced-motion: reduce) {
+    #alianzas .flip-inner { transition: none; }
+  }
+</style>
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-extrabold text-3xl md:text-4xl">Hemos colaborado con...</h2>
+    <p class="mt-3 mb-12 text-noche/70 max-w-xl">Trabajamos en colaboración con instituciones, organizaciones y colectivos que comparten nuestra visión de transformar Oaxaca.</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/fiscalia.png" class="h-12 object-contain" alt="Aliado 1">
+      <!-- ALIADO 1: Fiscalía General del Estado de Oaxaca
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="Fiscalía General del Estado de Oaxaca">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/fiscalia.png" class="h-16 max-w-[85%] object-contain" alt="Fiscalía General del Estado de Oaxaca">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">Fiscalía General del Estado de Oaxaca</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 2: Instituto de la Juventud, INJEO
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="Instituto de la Juventud, INJEO">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/INJEO.png" class="h-16 max-w-[85%] object-contain" alt="Instituto de la Juventud, INJEO">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">Instituto de la Juventud, INJEO</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 3: Observatorio de Justicia y Derecho, A.C.
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="Observatorio de Justicia y Derecho, A.C.">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/Observatorio.png" class="h-16 max-w-[85%] object-contain" alt="Observatorio de Justicia y Derecho, A.C.">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">Observatorio de Justicia y Derecho, A.C.</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 4: UNIVAS, Universidad Vasconcelos
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="UNIVAS, Universidad Vasconcelos">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/UNIVAS.png" class="h-16 max-w-[85%] object-contain" alt="UNIVAS, Universidad Vasconcelos">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">UNIVAS, Universidad Vasconcelos</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 5: UABJO, Universidad Autónoma Benito Juárez de Oaxaca
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="UABJO, Universidad Autónoma Benito Juárez de Oaxaca">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/Logo-UABJO.png" class="h-16 max-w-[85%] object-contain" alt="UABJO, Universidad Autónoma Benito Juárez de Oaxaca">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">UABJO, Universidad Autónoma Benito Juárez de Oaxaca</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 6: UGMEX Campus Oaxaca
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="UGMEX Campus Oaxaca">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/UGMEX.png" class="h-16 max-w-[85%] object-contain" alt="UGMEX Campus Oaxaca">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">UGMEX Campus Oaxaca</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 7: Stereo Uno
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="Stereo Uno">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/stereo1.png" class="h-16 max-w-[85%] object-contain" alt="Stereo Uno">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">Stereo Uno</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+      <!-- ALIADO 8: Secretaría de las Mujeres de Oaxaca
+           Cambia href="#" por el enlace a la publicación (Facebook o Instagram)
+           y "[mes y año]" por la fecha del convenio. -->
+      <a href="#" target="_blank" rel="noopener noreferrer" class="flip-card" aria-label="Secretaría de las Mujeres de Oaxaca">
+        <div class="flip-inner">
+          <div class="flip-face flip-front bg-white p-6 shadow">
+            <img src="assets/SEC. MUJERES.png" class="h-16 max-w-[85%] object-contain" alt="Secretaría de las Mujeres de Oaxaca">
+          </div>
+          <div class="flip-face flip-back bg-purple-700 text-white p-4 shadow">
+            <span class="font-bold text-sm leading-tight">Secretaría de las Mujeres de Oaxaca</span>
+            <span class="text-xs mt-2 opacity-90">Convenio firmado en [mes y año]</span>
+            <span class="flip-link text-xs font-semibold mt-2 underline">Ver publicación →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+<script>
+// TARJETAS DE ALIADOS: celular (sin hover) y tarjetas sin enlace
+(() => {
+  const cards = document.querySelectorAll('#alianzas .flip-card');
+  const noHover = window.matchMedia('(hover: none)');
+
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const pending = card.getAttribute('href') === '#';
+      const fromKeyboard = e.detail === 0; // Enter genera un click con detail 0
+
+      if (noHover.matches && !fromKeyboard) {
+        if (!card.classList.contains('is-flipped')) {
+          // Primer toque: girar esta y regresar las demás
+          e.preventDefault();
+          cards.forEach(c => c.classList.toggle('is-flipped', c === card));
+          return;
+        }
+        if (pending) {
+          // Sin enlace: el toque solo regresa la tarjeta
+          e.preventDefault();
+          card.classList.remove('is-flipped');
+          return;
+        }
+        return; // Segundo toque: abre el enlace
+      }
+
+      if (pending) e.preventDefault();
+    });
+  });
+
+  // Tocar fuera de las tarjetas las regresa a su cara frontal
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#alianzas .flip-card')) {
+      cards.forEach(c => c.classList.remove('is-flipped'));
+    }
+  });
+})();
+</script>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="bg-papel py-20 md:py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <h2 class="font-display font-extrabold text-3xl md:text-4xl">Síguenos en Instagram</h2>
+        <p class="mt-3 text-noche/70">Mira lo que estamos haciendo en nuestra comunidad.</p>
       </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/INJEO.png" class="h-12 object-contain" alt="Aliado 2">
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/Observatorio.png" class="h-12 object-contain" alt="Aliado 3">
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/UNIVAS.png" class="h-12 object-contain" alt="Aliado 4">
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/Logo-UABJO.png" class="h-12 object-contain" alt="Aliado 5">
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/UGMEX.png" class="h-12 object-contain" alt="Aliado 6">
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/stereo1.png" class="h-12 object-contain" alt="Aliado 7">
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow flex items-center justify-center">
-        <img src="assets/SEC. MUJERES.png" class="h-12 object-contain" alt="Aliado 8">
-      </div>
+      <a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 bg-morado hover:bg-moradoOsc text-white font-semibold px-5 py-2.5 rounded-xl transition-colors">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        @alianzadelajuventud.oax
+      </a>
+    </div>
+
+    <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <a href="https://www.instagram.com/p/DWjho3RDgsU/?img_index=1&igsh=MWpuaG9hb2c5ZjRrag==" target="_blank" rel="noopener noreferrer"
+         class="ig-card relative block aspect-square overflow-hidden rounded-xl" aria-label="Ver publicación en Instagram">
+        <img src="assets/hospital.jpeg" alt="Voluntarios de la Alianza en una actividad comunitaria" class="w-full h-full object-cover" loading="lazy">
+        <span class="absolute left-2 bottom-2 bg-white/90 text-noche rounded-full p-1.5" aria-hidden="true">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+        </span>
+      </a>
+      <a href="https://www.instagram.com/p/DWXMBCsAU9q/?img_index=2&igsh=MWI0bzU2OXQyMmpyeA==" target="_blank" rel="noopener noreferrer"
+         class="ig-card relative block aspect-square overflow-hidden rounded-xl" aria-label="Ver publicación en Instagram">
+        <img src="assets/zumba.jpeg" alt="Clase de zumba organizada por la Alianza" class="w-full h-full object-cover" loading="lazy">
+        <span class="absolute left-2 bottom-2 bg-white/90 text-noche rounded-full p-1.5" aria-hidden="true">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+        </span>
+      </a>
+      <a href="https://www.instagram.com/p/DVzFfx4gUIX/?img_index=2&igsh=MWdxcjQ0bDhhemI0eg==" target="_blank" rel="noopener noreferrer"
+         class="ig-card relative block aspect-square overflow-hidden rounded-xl" aria-label="Ver publicación en Instagram">
+        <img src="assets/vph.jpeg" alt="Publicación de la Alianza en Instagram" class="w-full h-full object-cover" loading="lazy">
+        <span class="absolute left-2 bottom-2 bg-white/90 text-noche rounded-full p-1.5" aria-hidden="true">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+        </span>
+      </a>
+      <a href="https://www.instagram.com/p/DWFD4DBAeFo/?igsh=YXkxNHd5am1hZm81" target="_blank" rel="noopener noreferrer"
+         class="ig-card relative block aspect-square overflow-hidden rounded-xl" aria-label="Ver publicación en Instagram">
+        <img src="assets/psico.jpeg" alt="Publicación de la Alianza en Instagram" class="w-full h-full object-cover" loading="lazy">
+        <span class="absolute left-2 bottom-2 bg-white/90 text-noche rounded-full p-1.5" aria-hidden="true">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+        </span>
+      </a>
     </div>
   </div>
 </section>
-</section>
 
-
-<section class="py-20 px-6 bg-white text-center">
-  <h2 class="text-4xl font-bold mb-4">Síguenos en Instagram</h2>
-  <p class="text-gray-500 mb-10">Mira lo que estamos haciendo en nuestra comunidad</p>
-
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
-
-    <!-- ITEM  INSTAGRAM-->
-    <a href="https://www.instagram.com/p/DWjho3RDgsU/?img_index=1&igsh=MWpuaG9hb2c5ZjRrag==" target="_blank" class="relative group">
-      <img src="assets/hospital.jpeg" class="w-full h-60 object-cover rounded-xl">
-      
-      <!-- BOTON IG -->
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-xl transition">
-        <span class="text-white text-sm">Ver en Instagram</span>
-      </div>
-    </a>
-
-    <a href="https://www.instagram.com/p/DWXMBCsAU9q/?img_index=2&igsh=MWI0bzU2OXQyMmpyeA==" target="_blank" class="relative group">
-      <img src="assets/zumba.jpeg" class="w-full h-60 object-cover rounded-xl">
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-xl transition">
-        <span class="text-white text-sm">Ver en Instagram</span>
-      </div>
-    </a>
-
-    <a href="https://www.instagram.com/p/DVzFfx4gUIX/?img_index=2&igsh=MWdxcjQ0bDhhemI0eg==" target="_blank" class="relative group">
-      <img src="assets/vph.jpeg" class="w-full h-60 object-cover rounded-xl">
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-xl transition">
-        <span class="text-white text-sm">Ver en Instagram</span>
-      </div>
-    </a>
-
-    <a href="https://www.instagram.com/p/DWFD4DBAeFo/?igsh=YXkxNHd5am1hZm81" target="_blank" class="relative group">
-      <img src="assets/psico.jpeg" class="w-full h-60 object-cover rounded-xl">
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-xl transition">
-        <span class="text-white text-sm">Ver en Instagram</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- BOTÓN IR A INSTAGRAM-->
- <a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank"
-   class="inline-block mt-10 bg-gradient-to-r from-indigo-500 via-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl shadow-lg 
-   hover:scale-110 hover:brightness-110 transition duration-300">
-  Ver Instagram
-</a>
-</section>
-
-
-<!-- BOTÓN CTA -->
-<section class="bg-blue-600 text-white text-center py-20 px-6">
-  <h2 class="text-4xl font-bold mb-4">¿Listo para ser parte del cambio?</h2>
-  <div class="flex flex-wrap justify-center gap-4 mt-6">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform" target="_blank" class="bg-white text-purple-700 px-6 py-3 rounded-xl shadow-lg 
-              transition duration-300 transform 
-              hover:scale-110 hover:bg-purple-900 hover:text-white hover:shadow-2xl 
-              animate-bounce">
-      Unirme</a>
-  </div>
-</section>
-
-<!-- UBICACIÓN -->
-<section class="py-20 px-6 bg-gray-100">
-  <div class="max-w-6xl mx-auto text-center">
-    <h2 class="text-4xl font-bold mb-6">Ubicación</h2>
-    <p class="mb-6">Mártires de Chicago 6ta, 1ra Etapa INFONAVIT 1ro de Mayo, 68027 Oaxaca de Juárez, Oax., México</p>
-    <iframe src="https://www.google.com/maps?q=Mártires+de+Chicago+6ta+Oaxaca&output=embed" class="w-full h-96 rounded-2xl shadow"></iframe>
-  </div>
-</section>
-
-<section class="py-20 px-6 bg-white">
-  <div class="max-w-4xl mx-auto">
-    
-    <h2 class="text-4xl font-bold text-center mb-10">
-      Preguntas frecuentes
-    </h2>
-
-    <div class="space-y-4">
-
-      <!-- ITEM -->
-      <div class="bg-gray-50 rounded-xl p-5 shadow hover:shadow-md transition cursor-pointer">
-        <button class="w-full text-left flex justify-between items-center faq-btn">
-          <span class="font-semibold">¿Tiene costo participar?</span>
-          <span class="text-xl">+</span>
-        </button>
-        <p class="mt-3 text-sm text-gray-600 hidden faq-content">
-          No, todas nuestras actividades y programas son completamente gratuitos.
-        </p>
-      </div>
-
-      <!-- ITEM -->
-      <div class="bg-gray-50 rounded-xl p-5 shadow hover:shadow-md transition cursor-pointer">
-        <button class="w-full text-left flex justify-between items-center faq-btn">
-          <span class="font-semibold">¿Porqué elegir Alianza?</span>
-          <span class="text-xl">+</span>
-        </button>
-        <p class="mt-3 text-sm text-gray-600 hidden faq-content">
-        Porque no solo somos voluntariado, somos una comunidad que forma líderes y genera impacto real en Oaxaca.</p>
-      </div>
-
-      <!-- ITEM -->
-      <div class="bg-gray-50 rounded-xl p-5 shadow hover:shadow-md transition cursor-pointer">
-        <button class="w-full text-left flex justify-between items-center faq-btn">
-          <span class="font-semibold">¿Cómo puedo unirme?</span>
-          <span class="text-xl">+</span>
-        </button>
-        <p class="mt-3 text-sm text-gray-600 hidden faq-content">
-          Solo debes registrarte, asistir a una reunión de inducción y comenzar a participar en nuestras actividades.
-          Registrate en el botón "Unirme".</p>
-      </div>
-
-      <!-- ITEM -->
-      <div class="bg-gray-50 rounded-xl p-5 shadow hover:shadow-md transition cursor-pointer">
-        <button class="w-full text-left flex justify-between items-center faq-btn">
-          <span class="font-semibold">¿Cuánto tiempo debo dedicar?</span>
-          <span class="text-xl">+</span>
-        </button>
-        <p class="mt-3 text-sm text-gray-600 hidden faq-content">
-          Tú decides tu nivel de participación. Puedes integrarte por actividades, proyectos o formar parte activa del equipo.
-        </p>
-      </div>
-
-      <!-- ITEM -->
-      <div class="bg-gray-50 rounded-xl p-5 shadow hover:shadow-md transition cursor-pointer">
-        <button class="w-full text-left flex justify-between items-center faq-btn">
-          <span class="font-semibold">¿Qué hace un voluntario en la Alianza?</span>
-          <span class="text-xl">+</span>
-        </button>
-        <p class="mt-3 text-sm text-gray-600 hidden faq-content">
-        Participa en brigadas comunitarias, proyectos sociales, eventos, campañas y programas de formación. Aquí no solo ayudas, también desarrollas habilidades reales.
-        </p>
-      </div>
-
-  <!-- ITEM -->
-      <div class="bg-gray-50 rounded-xl p-5 shadow hover:shadow-md transition cursor-pointer">
-        <button class="w-full text-left flex justify-between items-center faq-btn">
-          <span class="font-semibold">¿Qué obtengo al participar?</span>
-          <span class="text-xl">+</span>
-        </button>
-        <p class="mt-3 text-sm text-gray-600 hidden faq-content">
-       Experiencia real, constancias, desarrollo de habilidades (liderazgo, comunicación, trabajo en equipo), vinculación con instituciones, impacto social comprobable.
-        </p>
-      </div>
-
-
+<!-- LLAMADO A LA ACCIÓN -->
+<section class="sobre-oscuro relative overflow-hidden text-white">
+  <img src="assets/zumba.jpeg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+  <div class="absolute inset-0 bg-noche/85" aria-hidden="true"></div>
+  <div class="relative max-w-4xl mx-auto px-6 py-24 md:py-28 text-center">
+    <h2 class="font-display font-extrabold text-4xl md:text-5xl">¿Listo para ser parte del cambio?</h2>
+    <p class="mt-4 text-white/80 max-w-lg mx-auto">Regístrate y te invitamos a la próxima reunión de inducción.</p>
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
+         target="_blank" rel="noopener noreferrer"
+         class="bg-white text-noche hover:bg-sol font-semibold px-7 py-3 rounded-xl transition-colors">
+        Unirme
+      </a>
+      <a href="https://wa.me/529512879880?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20la%20Alianza%20de%20la%20Juventud%20Oaxaque%C3%B1a"
+         target="_blank" rel="noopener noreferrer"
+         class="border-2 border-white/50 hover:border-white font-semibold px-7 py-3 rounded-xl transition-colors">
+        Escríbenos por WhatsApp
+      </a>
     </div>
   </div>
 </section>
 
+<!-- PREGUNTAS FRECUENTES -->
+<section id="preguntas" class="py-20 md:py-24 px-6">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="font-display font-extrabold text-3xl md:text-4xl">Preguntas frecuentes</h2>
 
-<!-- CONTACTO -->
- <section id="contacto">
-<section class="bg-gray-900 text-white py-20 px-6 text-center">
-  <h2 class="text-3xl font-bold mb-6">Contacto</h2>
-  <p>💬 9512879880</p>
-  <p>✉️ alianzadelajuventud.oax1@gmail.com</p>
-  <div class="flex justify-center gap-6 mt-6 text-2xl">
-    <a href="https://www.facebook.com/alianzadelajuventud/" target="_blank" class="hover:text-blue-400">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-2.9h2.5V9.5c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6v2h2.9L16 14.9h-2.4v7A10 10 0 0 0 22 12"/></svg>
-    </a>
-    <a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank" class="hover:text-pink-400">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm6.5-.8a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-    </a>
-    <a href="https://wa.me/529512879880" target="_blank" class="hover:text-green-400">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M20 3.9A10 10 0 0 0 3.5 17.6L2 22l4.5-1.4A10 10 0 1 0 20 3.9zm-8 16a8 8 0 0 1-4.1-1.1l-.3-.2-2.7.8.9-2.6-.2-.3A8 8 0 1 1 12 20zm4.4-6.1c-.2-.1-1.2-.6-1.4-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.2-.4.1-.2-.1-.8-.3-1.5-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4.1-.1.2-.2.3-.3.1-.1.1-.2.2-.3.1-.1 0-.2 0-.3s-.5-1.3-.7-1.8c-.2-.4-.4-.3-.5-.3h-.5c-.2 0-.3 0-.5.2-.2.2-.7.7-.7 1.7s.7 2 1 2.3c.1.2 1.7 2.6 4.1 3.6.6.3 1 .4 1.3.5.6.2 1.2.2 1.7.1.5-.1 1.2-.5 1.4-1 .2-.5.2-.9.1-1-.1-.1-.2-.2-.4-.3z"/></svg>
-    </a>
+    <div class="faq mt-10 divide-y divide-noche/10 border-y border-noche/10">
+      <details class="group">
+        <summary class="flex justify-between items-center gap-4 py-5 font-semibold text-lg">
+          ¿Tiene costo participar?
+          <svg class="chev h-5 w-5 shrink-0 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p class="faq-body pb-5 text-noche/75 leading-relaxed">No, todas nuestras actividades y programas son completamente gratuitos.</p>
+      </details>
+      <details>
+        <summary class="flex justify-between items-center gap-4 py-5 font-semibold text-lg">
+          ¿Por qué elegir la Alianza?
+          <svg class="chev h-5 w-5 shrink-0 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p class="faq-body pb-5 text-noche/75 leading-relaxed">Porque no solo somos voluntariado: somos una comunidad que forma líderes y genera impacto real en Oaxaca.</p>
+      </details>
+      <details>
+        <summary class="flex justify-between items-center gap-4 py-5 font-semibold text-lg">
+          ¿Cómo puedo unirme?
+          <svg class="chev h-5 w-5 shrink-0 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p class="faq-body pb-5 text-noche/75 leading-relaxed">Solo debes registrarte, asistir a una reunión de inducción y comenzar a participar en nuestras actividades. Regístrate con el botón "Únete".</p>
+      </details>
+      <details>
+        <summary class="flex justify-between items-center gap-4 py-5 font-semibold text-lg">
+          ¿Cuánto tiempo debo dedicar?
+          <svg class="chev h-5 w-5 shrink-0 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p class="faq-body pb-5 text-noche/75 leading-relaxed">Tú decides tu nivel de participación. Puedes integrarte por actividades, proyectos o formar parte activa del equipo.</p>
+      </details>
+      <details>
+        <summary class="flex justify-between items-center gap-4 py-5 font-semibold text-lg">
+          ¿Qué hace un voluntario en la Alianza?
+          <svg class="chev h-5 w-5 shrink-0 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p class="faq-body pb-5 text-noche/75 leading-relaxed">Participa en brigadas comunitarias, proyectos sociales, eventos, campañas y programas de formación. Aquí no solo ayudas: también desarrollas habilidades reales.</p>
+      </details>
+      <details>
+        <summary class="flex justify-between items-center gap-4 py-5 font-semibold text-lg">
+          ¿Qué obtengo al participar?
+          <svg class="chev h-5 w-5 shrink-0 text-morado" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p class="faq-body pb-5 text-noche/75 leading-relaxed">Experiencia real, constancias, desarrollo de habilidades (liderazgo, comunicación, trabajo en equipo), vinculación con instituciones e impacto social comprobable.</p>
+      </details>
+    </div>
   </div>
 </section>
- </section>
- 
-<!-- LOGO WHATSAPP FLOTANTE -->
-<div class="fixed bottom-6 right-4 max-w-6xl mx-auto flex items-center gap-4 z-50 group">
-  <span class="bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition text-base">
-    Escríbenos tus dudas...
+
+<!-- CONTACTO Y UBICACIÓN -->
+<section id="contacto" class="bg-papel py-20 md:py-24 px-6">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14">
+    <div>
+      <h2 class="font-display font-extrabold text-3xl md:text-4xl">Contacto</h2>
+      <p class="mt-3 text-noche/70">Escríbenos o visítanos. Respondemos por WhatsApp.</p>
+
+      <ul class="mt-10 space-y-4">
+        <li>
+          <a href="https://wa.me/529512879880" target="_blank" rel="noopener noreferrer"
+             class="flex items-center gap-4 bg-white rounded-2xl p-5 hover:ring-2 hover:ring-morado/30 transition">
+            <span class="grid place-items-center h-12 w-12 rounded-xl bg-[#3BB273]/15 text-[#23894F] shrink-0">
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3z"/></svg>
+            </span>
+            <span><span class="block text-sm text-noche/60">WhatsApp</span><span class="font-semibold">951 287 9880</span></span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:alianzadelajuventud.oax1@gmail.com"
+             class="flex items-center gap-4 bg-white rounded-2xl p-5 hover:ring-2 hover:ring-morado/30 transition">
+            <span class="grid place-items-center h-12 w-12 rounded-xl bg-azul/15 text-azul shrink-0">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            </span>
+            <span class="min-w-0"><span class="block text-sm text-noche/60">Correo</span><span class="font-semibold break-all">alianzadelajuventud.oax1@gmail.com</span></span>
+          </a>
+        </li>
+        <li class="flex items-center gap-4 bg-white rounded-2xl p-5">
+          <span class="grid place-items-center h-12 w-12 rounded-xl bg-[#E0383E]/15 text-[#C42A30] shrink-0">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          </span>
+          <span><span class="block text-sm text-noche/60">Dirección</span><span class="font-semibold">Mártires de Chicago 6ta, 1ra Etapa INFONAVIT 1ro de Mayo, 68027 Oaxaca de Juárez, Oax.</span></span>
+        </li>
+      </ul>
+
+      <div class="mt-8 flex gap-3">
+        <a href="https://www.facebook.com/alianzadelajuventud/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de la Alianza"
+           class="grid place-items-center h-11 w-11 rounded-xl bg-white text-noche hover:bg-morado hover:text-white transition-colors">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-2.9h2.5V9.5c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6v2h2.9L16 14.9h-2.4v7A10 10 0 0 0 22 12"/></svg>
+        </a>
+        <a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de la Alianza"
+           class="grid place-items-center h-11 w-11 rounded-xl bg-white text-noche hover:bg-morado hover:text-white transition-colors">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <iframe src="https://www.google.com/maps?q=M%C3%A1rtires+de+Chicago,+INFONAVIT+1ro+de+Mayo,+68027+Oaxaca+de+Ju%C3%A1rez,+Oax.&output=embed"
+            title="Mapa: ubicación de la Alianza de la Juventud Oaxaqueña"
+            class="w-full h-80 lg:h-full min-h-[20rem] rounded-2xl border-0"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
+
+</main>
+
+<!-- PIE DE PÁGINA -->
+<footer class="sobre-oscuro bg-noche text-white">
+  <div class="franja h-1.5" aria-hidden="true"></div>
+  <div class="max-w-6xl mx-auto px-6 py-14 grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+    <div>
+      <div class="flex items-center gap-3">
+        <img src="assets/logo_alianza.png" alt="" class="h-12 w-12 bg-white rounded-full p-0.5" loading="lazy">
+        <span class="font-display font-extrabold text-lg leading-tight">Alianza de la Juventud<br>Oaxaqueña A.C.</span>
+      </div>
+      <p class="mt-4 text-white/70 max-w-xs">Solidaridad, compromiso, pluralidad.</p>
+    </div>
+    <nav aria-label="Pie de página">
+      <h2 class="font-semibold">Navegación</h2>
+      <ul class="mt-4 space-y-2 text-white/75">
+        <li><a href="#nosotros" class="hover:text-white">Nosotros</a></li>
+        <li><a href="#participa" class="hover:text-white">Participa</a></li>
+        <li><a href="#programas" class="hover:text-white">Programas</a></li>
+        <li><a href="#preguntas" class="hover:text-white">Preguntas frecuentes</a></li>
+      </ul>
+    </nav>
+    <div>
+      <h2 class="font-semibold">Contacto</h2>
+      <ul class="mt-4 space-y-2 text-white/75">
+        <li><a href="https://wa.me/529512879880" target="_blank" rel="noopener noreferrer" class="hover:text-white">WhatsApp: 951 287 9880</a></li>
+        <li><a href="https://www.facebook.com/alianzadelajuventud/" target="_blank" rel="noopener noreferrer" class="hover:text-white">Facebook</a></li>
+        <li><a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank" rel="noopener noreferrer" class="hover:text-white">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="border-t border-white/10 text-center text-sm text-white/60 py-5 px-6">
+    © <span id="year">2026</span> Alianza de la Juventud Oaxaqueña A.C.
+  </p>
+</footer>
+
+<!-- BOTÓN FLOTANTE DE WHATSAPP -->
+<div class="fixed bottom-5 right-4 z-40 flex items-center gap-3 group">
+  <span class="hidden md:block bg-white text-noche font-medium px-4 py-2 rounded-xl shadow-lg opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition pointer-events-none">
+    Escríbenos tus dudas
   </span>
-  <a href="https://wa.me/529512879880?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20la%20Alianza%20de%20la%20Juventud%20Oaxaque%C3%B1a" target="_blank" class="bg-green-500 text-white p-5 rounded-full shadow-xl hover:scale-110 transition flex items-center justify-center">
-    
-    <!-- LOGO WHATSAPP -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M20.52 3.48A11.9 11.9 0 0 0 12.02 0C5.4 0 .02 5.38.02 12c0 2.1.55 4.14 1.6 5.94L0 24l6.26-1.64A11.96 11.96 0 0 0 12.02 24c6.62 0 12-5.38 12-12 0-3.2-1.25-6.2-3.5-8.52zM12.02 21.8c-1.8 0-3.55-.5-5.07-1.45l-.36-.21-3.72.98.99-3.63-.23-.37a9.77 9.77 0 0 1-1.5-5.12c0-5.4 4.4-9.8 9.8-9.8 2.62 0 5.08 1.02 6.92 2.87a9.75 9.75 0 0 1 2.88 6.93c0 5.4-4.4 9.8-9.8 9.8zm5.4-7.34c-.3-.15-1.75-.87-2.02-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.28-.47-2.43-1.5-.9-.8-1.5-1.8-1.68-2.1-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.5-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.08 4.48.7.3 1.25.48 1.68.62.7.22 1.34.2 1.85.12.57-.08 1.75-.72 2-.92.25-.2.25-.37.17-.52-.07-.15-.27-.22-.57-.37z"/>
-    </svg>
+  <a href="https://wa.me/529512879880?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20la%20Alianza%20de%20la%20Juventud%20Oaxaque%C3%B1a"
+     target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp"
+     class="grid place-items-center h-14 w-14 rounded-full bg-[#25D366] text-white shadow-xl hover:scale-105 transition-transform">
+    <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3z"/></svg>
   </a>
 </div>
-<!--PIE DE PAGINA-->
-<footer class="text-center py-6 bg-black text-white text-sm">
-  © 2026 Alianza de la Juventud Oaxaqueña A.C.
-</footer>
+
+<script>
+(() => {
+  const header = document.getElementById('header');
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const iconOpen = document.getElementById('iconOpen');
+  const iconClose = document.getElementById('iconClose');
+  const hero = document.getElementById('inicio');
+  // AÑO EN EL PIE DE PÁGINA
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // MENÚ MÓVIL
+  const setMenu = (open) => {
+    mobileMenu.classList.toggle('hidden', !open);
+    mobileMenu.classList.toggle('flex', open);
+    header.classList.toggle('menu-open', open);
+    iconOpen.classList.toggle('hidden', open);
+    iconClose.classList.toggle('hidden', !open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  menuBtn.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => { if (e.matches) setMenu(false); });
+
+  // ENCABEZADO: CAMBIA A BLANCO AL SALIR DE LA PORTADA
+  new IntersectionObserver(([entry]) => {
+    header.classList.toggle('is-solid', !entry.isIntersecting);
+  }, { rootMargin: '-110px 0px 0px 0px' }).observe(hero);
+
+  // MENÚ: MARCA LA SECCIÓN ACTUAL
+  const links = [...document.querySelectorAll('.nav-link')];
+  const sections = document.querySelectorAll('main > section');
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      links.forEach(l => l.setAttribute('aria-current', String(!!entry.target.id && l.getAttribute('href') === '#' + entry.target.id)));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(s => navObserver.observe(s));
+})();
+</script>
+
+<!-- CONTADORES DE IMPACTO -->
+<script>
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const counters = document.querySelectorAll('#impacto [data-target]');
+  if (reduceMotion) return; // se quedan con el valor final
+
+  counters.forEach(el => el.textContent = '0');
+  let started = false;
+  new IntersectionObserver((entries, obs) => {
+    if (started || !entries.some(e => e.isIntersecting)) return;
+    started = true;
+    obs.disconnect();
+    counters.forEach(el => {
+      const target = Number(el.dataset.target);
+      const start = performance.now();
+      const dur = 1400;
+      const tick = (now) => {
+        const p = Math.min((now - start) / dur, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.5 }).observe(document.getElementById('impacto'));
+})();
+</script>
 
 </body>
 </html>
-
-<script>
-
-const menuBtn = document.getElementById('menuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-const menuIcon = document.getElementById('menuIcon');
-
-const navLinks = document.querySelectorAll('.nav-link');
-const logoText = document.getElementById('logoText');
-
-const header = document.getElementById('header');
-const hero = document.getElementById('hero');
-
-
-// MENU MOVIL
-menuBtn.addEventListener('click', () => {
-
-  mobileMenu.classList.toggle('hidden');
-
-});
-
-
-// CERRAR MENU AL DAR CLICK
-document.querySelectorAll('.mobile-link').forEach(link => {
-
-  link.addEventListener('click', () => {
-
-    mobileMenu.classList.add('hidden');
-
-  });
-
-});
-
-
-// CAMBIO DE COLOR AL SALIR DEL HERO
-const observer = new IntersectionObserver((entries) => {
-
-  entries.forEach(entry => {
-
-    if (entry.isIntersecting) {
-
-      // HEADER TRANSPARENTE
-      header.classList.remove('bg-white', 'shadow-2xl');
-
-      header.classList.add('bg-transparent');
-
-      // LOGO
-      logoText.classList.remove('text-gray-900');
-
-      logoText.classList.add('text-white');
-
-      // LINKS
-      navLinks.forEach(link => {
-
-        link.classList.remove('text-gray-900');
-
-        link.classList.add('text-white');
-      menuIcon.classList.remove('text-gray-900');
-      menuIcon.classList.add('text-white');
-      });
-
-    } else {
-
-      // HEADER BLANCO
-      header.classList.remove('bg-transparent');
-
-      header.classList.add('bg-white', 'shadow-2xl');
-
-      // LOGO
-      logoText.classList.remove('text-white');
-
-      logoText.classList.add('text-gray-900');
-
-      // LINKS
-      navLinks.forEach(link => {
-
-        link.classList.remove('text-white');
-
-        link.classList.add('text-gray-900');
-      menuIcon.classList.remove('text-white');
-menuIcon.classList.add('text-gray-900');  
-
-      });
-
-    }
-
-  });
-
-}, {
-  threshold: 0.25
-});
-
-observer.observe(hero);
-
-</script>
-
-<!-- IMPACTO JS-->
-
-<script>
-function animateCount(id, target) {
-  let el = document.getElementById(id);
-  let count = 0;
-  let increment = target / 100;
-
-  let interval = setInterval(() => {
-    count += increment;
-    if (count >= target) {
-      el.innerText = target + '+';
-      clearInterval(interval);
-    } else {
-      el.innerText = Math.floor(count);
-    }
-  }, 20);
-}
-
-// SCROLL
-let started = false;
-
-const observerImpacto = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !started) {
-      started = true;
-
-      animateCount('count1', 100);
-      animateCount('count2', 20);
-      animateCount('count3', 14);
-    }
-  });
-}, {
-  threshold: 0.7 // se activa cuando llegas a esa seccion, no cada que se actualize.
-});
-
-const section = document.querySelector('section.py-20.text-center');
-observerImpacto.observe(section);
-</script>
-</script>
-
-
-<script>
-const faqBtns = document.querySelectorAll('.faq-btn');
-
-faqBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const content = btn.parentElement.querySelector('.faq-content');
-    const icon = btn.querySelector('span:last-child');
-
-    content.classList.toggle('hidden');
-
-    
-    icon.textContent = content.classList.contains('hidden') ? '+' : '−';
-  });
-});
-</script>
-
