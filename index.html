@@ -24,6 +24,7 @@
             morado: '#7E22CE',  // botones principales
             moradoOsc: '#6B21A8',
             papel: '#F6F7FB',   // fondo claro de secciones
+            cielo: '#CFE8F8',   // azul cielo pastel: encabezado, portada y pie
             sol: '#F2C230'      // acento amarillo del logo
           },
           fontFamily: {
@@ -56,19 +57,19 @@
     .sobre-oscuro :focus-visible { outline-color: #F2C230; }
 
     /* ENCABEZADO: azul noche arriba, blanco al bajar */
-    .site-header { background: #14254F; color: #fff; transition: background-color .35s, color .35s, box-shadow .35s; }
+    .site-header { background: #CFE8F8; color: #14254F; transition: background-color .35s, color .35s, box-shadow .35s; }
     .site-header .header-row { transition: padding .35s; }
     .site-header.is-solid { background: #fff; color: #14254F; box-shadow: 0 6px 24px -12px rgba(20, 37, 79, .35); }
     .site-header.is-solid .header-row { padding-top: .5rem; padding-bottom: .5rem; }
     .site-header.is-solid :focus-visible { outline-color: #7E22CE; }
-    .site-header.menu-open { background: #14254F; color: #fff; box-shadow: none; }
+    .site-header.menu-open { background: #CFE8F8; color: #14254F; box-shadow: none; }
     .nav-link { position: relative; padding: .25rem 0; }
     .nav-link::after {
       content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
       background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s;
     }
     .nav-link:hover::after, .nav-link[aria-current="true"]::after { transform: scaleX(1); }
-    .site-header:not(.is-solid) .nav-link[aria-current="true"] { color: #F2C230; }
+    .site-header:not(.is-solid) .nav-link[aria-current="true"] { color: #7E22CE; }
 
     /* PORTADA: una sola secuencia de entrada */
     @keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -140,7 +141,7 @@
 
   <!-- MENÚ MÓVIL -->
   <nav id="mobileMenu" aria-label="Menú móvil"
-       class="sobre-oscuro hidden lg:hidden fixed inset-0 bg-noche text-white flex-col items-center justify-center gap-7 text-2xl font-display font-semibold">
+       class="hidden lg:hidden fixed inset-0 bg-cielo text-noche flex-col items-center justify-center gap-7 text-2xl font-display font-semibold">
     <a href="#impacto" class="mobile-link">Impacto</a>
     <a href="#nosotros" class="mobile-link">Nosotros</a>
     <a href="#participa" class="mobile-link">Participa</a>
@@ -153,7 +154,7 @@
 <main>
 
 <!-- PORTADA -->
-<section id="inicio" class="sobre-oscuro bg-noche text-white pt-[4.75rem] md:pt-[5.25rem]">
+<section id="inicio" class="bg-cielo text-noche pt-[4.75rem] md:pt-[5.25rem]">
   <div class="grid lg:grid-cols-[1.15fr_auto_1fr] lg:min-h-[calc(100svh-5.25rem)]">
 
     <div class="order-2 lg:order-1 flex items-center px-6 md:px-12 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:pr-14 py-14 lg:py-20">
@@ -161,21 +162,21 @@
         <h1 class="hero-in font-display font-extrabold text-[2.5rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem]">
           Impulsando juventudes para transformar Oaxaca
         </h1>
-        <p class="hero-in d1 mt-6 text-lg text-white/80 max-w-md">
+        <p class="hero-in d1 mt-6 text-lg text-noche/75 max-w-md">
           Impulsamos el liderazgo juvenil, el voluntariado y la acción social para generar impacto real en nuestras comunidades.
         </p>
         <div class="hero-in d2 mt-9 flex flex-wrap gap-3">
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
              target="_blank" rel="noopener noreferrer"
-             class="bg-white text-noche hover:bg-sol font-semibold px-6 py-3 rounded-xl transition-colors">
+             class="bg-morado hover:bg-moradoOsc text-white font-semibold px-6 py-3 rounded-xl transition-colors">
             Quiero ser parte
           </a>
           <a href="#programas"
-             class="border-2 border-white/40 hover:border-white font-semibold px-6 py-3 rounded-xl transition-colors">
+             class="border-2 border-noche/25 hover:border-noche font-semibold px-6 py-3 rounded-xl transition-colors">
             Conoce los programas
           </a>
         </div>
-        <p class="hero-in d3 mt-12 text-sm text-white/60">Solidaridad, compromiso, pluralidad.</p>
+        <p class="hero-in d3 mt-12 text-sm text-noche/60">Solidaridad, compromiso, pluralidad.</p>
       </div>
     </div>
 
@@ -619,21 +620,21 @@
 </section>
 
 <!-- LLAMADO A LA ACCIÓN -->
-<section class="sobre-oscuro relative overflow-hidden text-white">
+<section class="relative overflow-hidden text-noche">
   <img src="assets/zumba.jpeg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
-  <div class="absolute inset-0 bg-noche/85" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-cielo/90" aria-hidden="true"></div>
   <div class="relative max-w-4xl mx-auto px-6 py-24 md:py-28 text-center">
     <h2 class="font-display font-extrabold text-4xl md:text-5xl">¿Listo para ser parte del cambio?</h2>
-    <p class="mt-4 text-white/80 max-w-lg mx-auto">Regístrate y te invitamos a la próxima reunión de inducción.</p>
+    <p class="mt-4 text-noche/75 max-w-lg mx-auto">Regístrate y te invitamos a la próxima reunión de inducción.</p>
     <div class="mt-9 flex flex-wrap justify-center gap-3">
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNIYgoaTfZWgeLULfbtVWeA4fN-QvX0qd5BUEjwUzpYPG9Og/viewform"
          target="_blank" rel="noopener noreferrer"
-         class="bg-white text-noche hover:bg-sol font-semibold px-7 py-3 rounded-xl transition-colors">
+         class="bg-morado hover:bg-moradoOsc text-white font-semibold px-7 py-3 rounded-xl transition-colors">
         Unirme
       </a>
       <a href="https://wa.me/529512879880?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20la%20Alianza%20de%20la%20Juventud%20Oaxaque%C3%B1a"
          target="_blank" rel="noopener noreferrer"
-         class="border-2 border-white/50 hover:border-white font-semibold px-7 py-3 rounded-xl transition-colors">
+         class="border-2 border-noche/25 hover:border-noche font-semibold px-7 py-3 rounded-xl transition-colors">
         Escríbenos por WhatsApp
       </a>
     </div>
@@ -748,7 +749,7 @@
 </main>
 
 <!-- PIE DE PÁGINA -->
-<footer class="sobre-oscuro bg-noche text-white">
+<footer class="bg-cielo text-noche">
   <div class="franja h-1.5" aria-hidden="true"></div>
   <div class="max-w-6xl mx-auto px-6 py-14 grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
     <div>
@@ -756,27 +757,27 @@
         <img src="assets/logo_alianza.png" alt="" class="h-12 w-12 bg-white rounded-full p-0.5" loading="lazy">
         <span class="font-display font-extrabold text-lg leading-tight">Alianza de la Juventud<br>Oaxaqueña A.C.</span>
       </div>
-      <p class="mt-4 text-white/70 max-w-xs">Solidaridad, compromiso, pluralidad.</p>
+      <p class="mt-4 text-noche/70 max-w-xs">Solidaridad, compromiso, pluralidad.</p>
     </div>
     <nav aria-label="Pie de página">
       <h2 class="font-semibold">Navegación</h2>
-      <ul class="mt-4 space-y-2 text-white/75">
-        <li><a href="#nosotros" class="hover:text-white">Nosotros</a></li>
-        <li><a href="#participa" class="hover:text-white">Participa</a></li>
-        <li><a href="#programas" class="hover:text-white">Programas</a></li>
-        <li><a href="#preguntas" class="hover:text-white">Preguntas frecuentes</a></li>
+      <ul class="mt-4 space-y-2 text-noche/75">
+        <li><a href="#nosotros" class="hover:text-morado">Nosotros</a></li>
+        <li><a href="#participa" class="hover:text-morado">Participa</a></li>
+        <li><a href="#programas" class="hover:text-morado">Programas</a></li>
+        <li><a href="#preguntas" class="hover:text-morado">Preguntas frecuentes</a></li>
       </ul>
     </nav>
     <div>
       <h2 class="font-semibold">Contacto</h2>
-      <ul class="mt-4 space-y-2 text-white/75">
-        <li><a href="https://wa.me/529512879880" target="_blank" rel="noopener noreferrer" class="hover:text-white">WhatsApp: 951 287 9880</a></li>
-        <li><a href="https://www.facebook.com/alianzadelajuventud/" target="_blank" rel="noopener noreferrer" class="hover:text-white">Facebook</a></li>
-        <li><a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank" rel="noopener noreferrer" class="hover:text-white">Instagram</a></li>
+      <ul class="mt-4 space-y-2 text-noche/75">
+        <li><a href="https://wa.me/529512879880" target="_blank" rel="noopener noreferrer" class="hover:text-morado">WhatsApp: 951 287 9880</a></li>
+        <li><a href="https://www.facebook.com/alianzadelajuventud/" target="_blank" rel="noopener noreferrer" class="hover:text-morado">Facebook</a></li>
+        <li><a href="https://www.instagram.com/alianzadelajuventud.oax/" target="_blank" rel="noopener noreferrer" class="hover:text-morado">Instagram</a></li>
       </ul>
     </div>
   </div>
-  <p class="border-t border-white/10 text-center text-sm text-white/60 py-5 px-6">
+  <p class="border-t border-noche/10 text-center text-sm text-noche/60 py-5 px-6">
     © <span id="year">2026</span> Alianza de la Juventud Oaxaqueña A.C.
   </p>
 </footer>
